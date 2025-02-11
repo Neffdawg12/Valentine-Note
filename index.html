@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blossoming Flowers</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #2a1b3d;
+            overflow: hidden;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .flower {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            animation: bloom 3s ease-in-out infinite alternate;
+        }
+        @keyframes bloom {
+            0% {
+                width: 10px;
+                height: 10px;
+                opacity: 0;
+            }
+            100% {
+                width: 80px;
+                height: 80px;
+                opacity: 1;
+            }
+        }
+        .pokeball {
+            position: absolute;
+            bottom: 50px;
+            width: 50px;
+            height: 50px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/5/53/Poké_Ball_icon.svg') no-repeat center;
+            background-size: cover;
+            animation: shake 0.5s infinite alternate;
+            cursor: pointer;
+            z-index: 10;
+        }
+        @keyframes shake {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+        .flash {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, white 10%, rgba(255,255,255,0) 70%);
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 20;
+        }
+        .umbreon {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: url('https://www.serebii.net/Shiny/SV/197.png') no-repeat center;
+            background-size: contain;
+            display: none;
+            z-index: 999;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Happy Valentine's Day, Nevada!</h1>
+    <h2>Have a wonderful day, Princess</h2>
+    <div class="pokeball" id="pokeball"></div>
+    <div class="flash" id="flash"></div>
+    <div class="umbreon" id="umbreon"></div>
+    <script>
+        document.getElementById("pokeball").addEventListener("click", function() {
+            let flash = document.getElementById("flash");
+            let umbreon = document.getElementById("umbreon");
+            let pokeball = this;
+            
+            flash.style.display = "block";
+            flash.style.opacity = "1";
+            flash.style.left = pokeball.getBoundingClientRect().left + "px";
+            flash.style.top = pokeball.getBoundingClientRect().top + "px";
+            
+            setTimeout(() => {
+                flash.style.opacity = "0";
+                setTimeout(() => { flash.style.display = "none"; }, 300);
+                pokeball.style.display = "none";
+                
+                umbreon.style.display = "block";
+                umbreon.style.left = pokeball.getBoundingClientRect().left + "px";
+                umbreon.style.top = pokeball.getBoundingClientRect().top + "px";
+                
+                document.addEventListener("mousemove", function moveUmbreon(event) {
+                    umbreon.style.left = event.pageX + "px";
+                    umbreon.style.top = event.pageY + "px";
+                });
+            }, 300);
+        });
+
+        function createFlower(x, y, delay) {
+            let flower = document.createElement("div");
+            flower.className = "flower";
+            flower.style.background = `hsl(${Math.random() * 50 + 250}, 80%, 60%)`;
+            flower.style.left = `${x}px`;
+            flower.style.top = `${y}px`;
+            flower.style.animationDelay = `${delay}s`;
+            document.body.appendChild(flower);
+        }
+
+        for (let i = 0; i < 20; i++) {
+            createFlower(
+                Math.random() * window.innerWidth,
+                Math.random() * window.innerHeight,
+                Math.random() * 3
+            );
+        }
+    </script>
+</body>
+</html>
